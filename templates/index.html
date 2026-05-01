@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Spam Detector</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🤖 AI Detector</h2>
+
+        <button onclick="focusText()">📧 Spam Detection</button>
+        <button onclick="startVoice()">🎤 Voice Input</button>
+        <button onclick="triggerUpload()">📂 File Upload</button>
+        <button onclick="showInfo()">🔗 URL Detection</button>
+        <button onclick="showInfo()">📊 Smart Prediction</button>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <h1>📧 Smart Spam Detector</h1>
+
+        <form action="/predict" method="post">
+            <textarea id="message" name="message" placeholder="Type or use voice..."></textarea>
+
+            <div class="buttons">
+                <button type="button" onclick="startVoice()">🎤 Speak</button>
+                <button type="submit">🚀 Analyze</button>
+            </div>
+        </form>
+
+        <br>
+
+        <!-- File Upload -->
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">📂 Upload File</button>
+        </form>
+
+        {% if prediction_text %}
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+// Focus textbox
+function focusText() {
+    document.getElementById("message").focus();
+}
+
+// Voice input
+function startVoice() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Use Chrome browser for voice feature");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        document.getElementById("message").value = event.results[0][0].transcript;
+    };
+}
+
+// Trigger file upload
+function triggerUpload() {
+    document.querySelector('input[type="file"]').click();
+}
+
+// Info
+function showInfo() {
+    alert("Feature handled automatically in backend.");
+}
+</script>
+
+</body>
+</html>
